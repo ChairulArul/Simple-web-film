@@ -5,8 +5,11 @@ import { useNavigate } from "react-router-dom";
 const Movie = ({ movie }) => {
   const navigate = useNavigate();
 
+  // Handler ketika kartu film diklik
   const handleMovieClick = () => {
-    navigate(`/movie/${movie.id}`);
+    if (movie && movie.id) {
+      navigate(`/movie/${movie.id}`);
+    }
   };
 
   return (
@@ -16,19 +19,26 @@ const Movie = ({ movie }) => {
       style={{
         cursor: "pointer",
         transition: "transform 0.3s ease",
-        hover: { transform: "scale(1.05)" },
       }}
     >
+      {/* Gambar Poster */}
       <img
-        src={`https://image.tmdb.org/t/p/w185/${movie.poster_path}`}
-        alt={movie.title}
+        src={
+          movie?.poster_path
+            ? `https://image.tmdb.org/t/p/w185/${movie.poster_path}`
+            : "https://via.placeholder.com/185x300?text=No+Image"
+        }
+        alt={movie?.title || "No Title"}
         style={{
           width: "100%",
           height: "300px",
           objectFit: "cover",
         }}
       />
+
+      {/* Bagian Bawah Kartu */}
       <div className="movie_card_bot">
+        {/* Judul dan Rating */}
         <div
           style={{
             display: "flex",
@@ -37,18 +47,21 @@ const Movie = ({ movie }) => {
           }}
         >
           <h6 className="title" style={{ margin: 0 }}>
-            {convertTitle(movie.title)}
+            {movie?.title ? convertTitle(movie.title) : "No Title"}
           </h6>
           <p
             className="rating"
             style={{
               margin: 0,
-              color: movie.vote_average > 7 ? "green" : "black",
+              color: movie?.vote_average > 7 ? "green" : "black",
             }}
           >
-            {Math.round(movie.vote_average)}/10
+            {movie?.vote_average ? Math.round(movie.vote_average) : "N/A"}
+            /10
           </p>
         </div>
+
+        {/* Teks Informasi */}
         <div
           style={{
             display: "flex",
@@ -64,6 +77,8 @@ const Movie = ({ movie }) => {
             Popularity
           </p>
         </div>
+
+        {/* Tanggal Rilis dan Popularitas */}
         <div
           style={{
             display: "flex",
@@ -71,9 +86,9 @@ const Movie = ({ movie }) => {
             marginTop: "4px",
           }}
         >
-          <p style={{ margin: 0 }}>{movie.release_date}</p>
+          <p style={{ margin: 0 }}>{movie?.release_date || "Unknown"}</p>
           <p className="duration" style={{ margin: 0 }}>
-            {movie.popularity.toFixed(1)}
+            {movie?.popularity ? movie.popularity.toFixed(1) : "N/A"}
           </p>
         </div>
       </div>
